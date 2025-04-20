@@ -1,6 +1,6 @@
 import React from "react";
 
-const HostingModal = ({ onClose }) => {
+const HostingModal = ({ onClose, onSave }) => {
   return (
     <div className="fixed inset-0 bg-opacity-40 z-50 flex items-center justify-center">
       <div className="relative bg-white w-[512px] rounded-[20px] p-6 shadow-xl h-[731px]">
@@ -91,7 +91,10 @@ const HostingModal = ({ onClose }) => {
           >
             Cancel
           </button>
-          <button className="w-[100px] h-[45px] bg-[#2D74FF]  text-white rounded-md">
+          <button
+            className="w-[100px] h-[45px] bg-[#2D74FF] text-white rounded-md"
+            onClick={onSave}
+          >
             Save
           </button>
         </div>

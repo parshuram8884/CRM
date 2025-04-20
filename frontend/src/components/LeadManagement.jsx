@@ -26,15 +26,18 @@ import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { FiEdit, FiUser, FiTrash2, FiMoreVertical } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import DescriptionModal from "./DescriptionBox";
+import { FiUploadCloud } from "react-icons/fi";
 import HostingModal from "./HostingModal";
+import DescriptionModal from "./DescriptionBox";
+
 
 export default function LeadManagement() {
   // State for modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isHostingModalOpen, setIsHostingModalOpen] = useState(false);
-
+  const [pendingHostingLeadId, setPendingHostingLeadId] = useState(null);
+  // State for leads data
   const [leads, setLeads] = useState([
     {
       id: "ICCLNT_2025",
@@ -92,6 +95,14 @@ export default function LeadManagement() {
       hosting: false,
     },
   ]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Add this filter function
+  const filteredLeads = leads.filter(
+    (lead) =>
+      lead.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      lead.clientName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   // Status options
   const statusOptions = ["Received", "Processing", "Closed", "Rejected"];
   // Add this useEffect to apply custom styles to SweetAlert
@@ -121,16 +132,20 @@ export default function LeadManagement() {
     };
   }, []);
 
+  // Then add the click outside effect
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".action-menu")) {
+        setLeads(leads.map((lead) => ({ ...lead, showActions: false })));
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [leads]);
+
   // Toggle handlers
   const handleSeoToggle = (leadId) => {
-    setLeads(
-      leads.map((lead) =>
-        lead.id === leadId ? { ...lead, seo: !lead.seo } : lead
-      )
-    );
-  };
-
-  const handleHostingToggle = (leadId) => {
     setLeads(
       leads.map((lead) => {
         if (lead.id === leadId) {
@@ -142,7 +157,32 @@ export default function LeadManagement() {
     );
   };
 
-  // // Toggle action menu visibility
+  const handleHostingToggle = (leadId) => {
+    const lead = leads.find((l) => l.id === leadId);
+    if (!lead.hosting) {
+      setPendingHostingLeadId(leadId);
+      setIsHostingModalOpen(true);
+    } else {
+      setLeads(
+        leads.map((lead) =>
+          lead.id === leadId ? { ...lead, hosting: false } : lead
+        )
+      );
+    }
+  };
+
+  const handleSaveHosting = () => {
+    if (pendingHostingLeadId) {
+      setLeads(
+        leads.map((lead) =>
+          lead.id === pendingHostingLeadId ? { ...lead, hosting: true } : lead
+        )
+      );
+      setIsHostingModalOpen(false);
+      setPendingHostingLeadId(null);
+    }
+  };
+
   const toggleActionMenu = (leadId) => {
     setLeads(
       leads.map((lead) =>
@@ -153,7 +193,6 @@ export default function LeadManagement() {
     );
   };
 
- 
   // Function to get status badge style
   const getStatusBadgeClass = (status) => {
     switch (status) {
@@ -191,31 +230,6 @@ export default function LeadManagement() {
     // Close the action menu
     toggleActionMenu(leadId);
   };
-
- 
- 
-
-  // For status update confirmation
-  // const updateStatus = (leadId, newStatus) => {
-  //   setLeads(
-  //     leads.map((lead) =>
-  //       lead.id === leadId
-  //         ? { ...lead, status: newStatus, showStatusDropdown: false }
-  //         : lead
-  //     )
-  //   );
-
-  //   // Show success toast
-  //   Swal.fire({
-  //     position: "bottom-end",
-  //     icon: "success",
-  //     title: "Status updated",
-  //     text: `Client status changed to ${newStatus}`,
-  //     showConfirmButton: false,
-  //     timer: 1500,
-  //     toast: true,
-  //   });
-  // };
 
   // "Add Client" button click
   const handleAddClientClick = () => {
@@ -267,7 +281,7 @@ export default function LeadManagement() {
         </div>
         <div class="mb-3 ">
           <label class="block text-sm font-medium text-gray-700 mb-1">Attach Document</label>
-          <input id="clientDocument" type="file" class="w-full bg-[#F8F8F8] outline-none h-[80px]">
+          <input id="clientDocument" type="file" class="w-full bg-[#F8F8F8] border-dashed border flex items-center justify-center  p-2 border-blue-400 outline-none h-[80px]">
         </div>
         
         <div class="flex space-x-2 mt-4">
@@ -387,86 +401,243 @@ export default function LeadManagement() {
     });
   };
 
-  // For edit completion
-  const handleEditComplete = (leadId) => {
-    // Update the lead to hide the status dropdown
-    setLeads(
-      leads.map((lead) =>
-        lead.id === leadId ? { ...lead, showStatusDropdown: false } : lead
-      )
-    );
-
-    // Show success message
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "Client updated successfully",
-      showConfirmButton: false,
-      timer: 1500,
-    });
-  };
-
-  const handleViewProfile = (leadId) => {
-    // Find the lead
+  // Handle edit button click
+  const handleEdit = (leadId) => {
     const lead = leads.find((l) => l.id === leadId);
 
-    if (lead) {
-      Swal.fire({
-        // title: `${lead.clientName}'s Profile`,
-        html: `
-          <div class="text-left w-[500px]  ">
-          <form class="space-y-3 flex flex-col  ">
-    <label for="clientName">Client Name</label>
-    <input type="text" id="clientName" class="bg-[#F8F8F8]  p-2 rounded-sm" value="${lead.clientName}" readonly class="border-2 border-gray-300 rounded-md px-2 py-1 mb-2 w-full" />
-    <div class="flex gap-4">
-    <div class="space-y-3 flex flex-col ">
-    <label>Email</label>
-        <input type="text" id="clientName" class="bg-[#F8F8F8] p-2 rounded-sm" value="email id" readonly class="border-2 border-gray-300 rounded-md px-2 py-1 mb-2 w-full" />
-    </div>
-    <div class="space-y-3 flex flex-col ">
-    <label>Phone Number:</label>
-        <input type="text" id="clientName" class="bg-[#F8F8F8] p-2 rounded-sm" value="${lead.phoneNumber}" readonly class="border-2 border-gray-300 rounded-md px-2 py-1 mb-2 w-full" />
-
-    </div>
-    </div>
-    <div>
-    <div class="space-y-3 flex flex-col ">
-    <label>Business Name</label>
-        <input type="text" id="clientName" class="bg-[#F8F8F8] p-2 rounded-sm" value="${lead.businessName}" readonly class="border-2 border-gray-300 rounded-md px-2 py-1 mb-2 w-full" />
-    </div>
-    <div class="space-y-3 flex flex-col ">
-    <label>Industry Type</label>
-     <input type="text" id="clientName" class="bg-[#F8F8F8] p-2 rounded-sm" value="${lead.industryType}" readonly class="border-2 border-gray-300 rounded-md px-2 py-1 mb-2 w-full" />
-    </div>
-    </div>
-    <div class="space-y-3 flex flex-col ">
-    <label>Status</label>
-    <select id="status" class="bg-[#F8F8F8] p-2 rounded-sm w-[200px]">
-    <option>Select Status</option>
-    <optipn>
-    Recieved
-    </optipn>
-    <option>Processing</option>
-    <option>Closed</option>
-    <option>Rejected</option>
-    </select>
-    </div>
-            
-          </form>
+    Swal.fire({
+      title: "Edit Client Details",
+      html: `
+        <form id="editForm" class="text-left">
+          <div class="mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Client Name *</label>
+            <input id="editClientName" class="swal2-input w-full" value="${
+              lead.clientName
+            }" required>
+          </div>
+          
+          <div class="flex justify-between w-full gap-4">
+            <div class="mb-3 w-1/2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+              <input id="editEmail" type="email" class="swal2-input w-full" value="${
+                lead.email
+              }" required>
             </div>
-        `,
-        confirmButtonText: "Close",
-        confirmButtonColor: "#3085d6",
-        width: "400px",
-      });
-    }
+            
+            <div class="mb-3 w-1/2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+              <input id="editPhone" class="swal2-input w-full" value="${
+                lead.phoneNumber
+              }" required>
+            </div>
+          </div>
+  
+          <div class="flex justify-between w-full gap-4">
+            <div class="mb-3 w-1/2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Business Name *</label>
+              <input id="editBusiness" class="swal2-input w-full" value="${
+                lead.businessName
+              }" required>
+            </div>
+            
+            <div class="mb-3 w-1/2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Industry Type *</label>
+              <input id="editIndustry" class="swal2-input w-full" value="${
+                lead.industryType
+              }" required>
+            </div>
+          </div>
+  
+          <div class="mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Status *</label>
+            <select id="editStatus" class="swal2-select w-full">
+              ${statusOptions
+                .map(
+                  (status) =>
+                    `<option value="${status}" ${
+                      lead.status === status ? "selected" : ""
+                    }>${status}</option>`
+                )
+                .join("")}
+            </select>
+          </div>
+  
+          <div class="flex space-x-4 mt-4">
+            <div class="flex items-center">
+              <label class="mr-2 text-sm font-medium text-gray-700">SEO</label>
+              <input id="editSeo" type="checkbox" class="swal2-checkbox" ${
+                lead.seo ? "checked" : ""
+              }>
+            </div>
+            
+            <div class="flex items-center">
+              <label class="mr-2 text-sm font-medium text-gray-700">Hosting</label>
+              <input id="editHosting" type="checkbox" class="swal2-checkbox" ${
+                lead.hosting ? "checked" : ""
+              }>
+            </div>
+          </div>
+        </form>
+      `,
+      showCancelButton: true,
+      confirmButtonText: "Save Changes",
+      confirmButtonColor: "#2D74FF",
+      cancelButtonColor: "#d33",
+      width: "600px",
+      preConfirm: () => {
+        const updatedData = {
+          clientName: document.getElementById("editClientName").value,
+          email: document.getElementById("editEmail").value,
+          phoneNumber: document.getElementById("editPhone").value,
+          businessName: document.getElementById("editBusiness").value,
+          industryType: document.getElementById("editIndustry").value,
+          status: document.getElementById("editStatus").value,
+          seo: document.getElementById("editSeo").checked,
+          hosting: document.getElementById("editHosting").checked,
+        };
+
+        if (
+          !updatedData.clientName ||
+          !updatedData.email ||
+          !updatedData.phoneNumber ||
+          !updatedData.businessName ||
+          !updatedData.industryType
+        ) {
+          Swal.showValidationMessage("Please fill all required fields");
+          return false;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(updatedData.email)) {
+          Swal.showValidationMessage("Please enter a valid email address");
+          return false;
+        }
+
+        return updatedData;
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setLeads(
+          leads.map((lead) =>
+            lead.id === leadId ? { ...lead, ...result.value } : lead
+          )
+        );
+
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Changes saved successfully",
+          text: `Client ${result.value.clientName} has been updated`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
+
+    toggleActionMenu(leadId);
+  };
+
+  // Handle edit completion
+  const handleDescription = (leadId) => {
+    Swal.fire({
+      title: "Description",
+      html: `
+        <div class="text-left p-4">
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Details</label>
+            <textarea 
+              id="details" 
+              class="w-full h-24 p-2 border rounded-md bg-[#F8F8F8] resize-none focus:outline-none focus:ring-1 focus:ring-blue-500"
+              placeholder="Enter description details..."
+            ></textarea>
+          </div>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Reference File</label>
+            <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-all cursor-pointer">
+              <input type="file" id="referenceFile" class="hidden" />
+              <div class="">
+                <FiUploadCloud class="h-6 w-6 text-gray-400" />
+                <p class="text-sm text-gray-500">Drag here to browse</p>
+              </div>
+            </div>
+            <p id="fileName" class="mt-2 text-sm text-gray-500"></p>
+          </div>
+        </div>
+      `,
+      showCloseButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#2D74FF",
+      cancelButtonColor: "#d33",
+      width: "500px",
+      didOpen: () => {
+        const fileInput = document.getElementById("referenceFile");
+        const fileNameDisplay = document.getElementById("fileName");
+        const dropZone = fileInput.parentElement;
+
+        fileInput.onchange = (e) => {
+          if (e.target.files[0]) {
+            fileNameDisplay.textContent = e.target.files[0].name;
+          }
+        };
+
+        dropZone.onclick = () => fileInput.click();
+
+        // Drag and drop functionality
+        dropZone.ondragover = (e) => {
+          e.preventDefault();
+          dropZone.classList.add("border-blue-400");
+        };
+
+        dropZone.ondragleave = () => {
+          dropZone.classList.remove("border-blue-400");
+        };
+
+        dropZone.ondrop = (e) => {
+          e.preventDefault();
+          dropZone.classList.remove("border-blue-400");
+          fileInput.files = e.dataTransfer.files;
+          if (e.dataTransfer.files[0]) {
+            fileNameDisplay.textContent = e.dataTransfer.files[0].name;
+          }
+        };
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const details = document.getElementById("details").value;
+        const file = document.getElementById("referenceFile").files[0];
+
+        // Handle the save action
+        setLeads(
+          leads.map((lead) => {
+            if (lead.id === leadId) {
+              return {
+                ...lead,
+                description: details,
+                referenceFile: file ? file.name : null,
+              };
+            }
+            return lead;
+          })
+        );
+
+        Swal.fire({
+          icon: "success",
+          title: "Description saved successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
 
     // Close the action menu
     toggleActionMenu(leadId);
   };
 
   return (
-    <div className="flex ">
+    <div className="flex    h-screen">
       <div className="bg-[#1D1D42] w-[18%]   text-white h-screen space-y-4">
         <div className="flex  items-center gap-6 text-white p-4 ">
           <img src="/logo.png" alt="" className="w-[50px] h-[55px]" />
@@ -538,20 +709,24 @@ export default function LeadManagement() {
             <IoIosArrowDown />
           </div>
         </div>
-        <div className="py-2 flex justify-between items-center p-6">
+        <div className="py-2 flex  justify-between items-center p-6">
+          {/* Searchbar  */}
+
           <div className="relative">
             <input
               type="text"
-              name=""
-              id=""
-              placeholder="Search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search by ID or Name"
               className="border-2 py-1 px-7 border-gray-200 rounded-md w-[300px] outline-none"
             />
-            <div className="absolute top-[7px]  left-[8px] text-gray-500 text-[20px]">
+            <div className="absolute top-[7px] left-[8px] text-gray-500 text-[20px]">
               <CiSearch />
             </div>
           </div>
-         
+
+          <tbody className="bg-white divide-y divide-gray-200"></tbody>
+
           <div
             onClick={handleAddClientClick}
             className="bg-[#2D74FF] px-2 py-1 rounded-sm cursor-pointer font-semibold text-white flex gap-1 items-center"
@@ -560,8 +735,8 @@ export default function LeadManagement() {
             Add Client
           </div>
         </div>
-        <div className="p-6 bg-[#F8F8F8] h-[675px] overflow-hidden">
-          <div className="overflow-x-auto rounded-md bg-white h-[590px]  p-6">
+        <div className="p-6 bg-[#F8F8F8] h-[601px] overflow-hidden">
+          <div className="overflow-x-auto rounded-md bg-white h-[510px]  p-6">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-white">
                 <tr>
@@ -632,7 +807,7 @@ export default function LeadManagement() {
                         id={lead.id}
                       />
                     </td>
-                    
+
                     <td className="px-4 py-2 text-sm text-gray-500 relative">
                       <button
                         onClick={() => toggleActionMenu(lead.id)}
@@ -642,11 +817,10 @@ export default function LeadManagement() {
                       </button>
 
                       {lead.showActions && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200">
+                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200 action-menu">
                           <div className="py-1">
                             <button
-                            
-                              onClick={() => handleEditComplete(lead.id)}
+                              onClick={() => handleEdit(lead.id)}
                               className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                             >
                               <FiEdit className="mr-3 h-4 w-4" />
@@ -692,7 +866,15 @@ export default function LeadManagement() {
           </div>
         </div>
       </div>
-      {isHostingModalOpen && <HostingModal onClose={() => setIsHostingModalOpen(false)} />}
+      {isHostingModalOpen && (
+        <HostingModal
+          onClose={() => {
+            setIsHostingModalOpen(false);
+            setPendingHostingLeadId(null);
+          }}
+          onSave={handleSaveHosting}
+        />
+      )}
     </div>
   );
 }
