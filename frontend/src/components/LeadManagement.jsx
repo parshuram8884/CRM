@@ -774,7 +774,7 @@ export default function LeadManagement() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {leads.map((lead) => (
+                {filteredLeads.map((lead) => (
                   <tr key={lead.id} className="hover:bg-gray-50">
                     <td className="px-4 py-2">{lead.date}</td>
                     <td className="px-4 py-2 text-blue-600 font-medium">

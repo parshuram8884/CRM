@@ -4,7 +4,7 @@ import { HiOutlineDocumentText } from "react-icons/hi";
 
 const DescriptionModal = ({ onClose }) => {
   return (
-    <div className="fixed inset-0  bg-opacity-40 flex justify-center items-center z-50">
+    <div className="block fixed inset-0  bg-opacity-40 flex justify-center items-center z-50">
       <div className="relative bg-white w-[512px] h-[514px] rounded-[20px] shadow-xl">
 
         {/* Description Title */}
