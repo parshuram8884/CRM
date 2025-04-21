@@ -30,7 +30,6 @@ import { FiUploadCloud } from "react-icons/fi";
 import HostingModal from "./HostingModal";
 import DescriptionModal from "./DescriptionBox";
 
-
 export default function LeadManagement() {
   // State for modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -637,244 +636,260 @@ export default function LeadManagement() {
   };
 
   return (
-    <div className="flex    h-screen">
-      <div className="bg-[#1D1D42] w-[18%]   text-white h-screen space-y-4">
-        <div className="flex  items-center gap-6 text-white p-4 ">
-          <img src="/logo.png" alt="" className="w-[50px] h-[55px]" />
-          <div>Infotech Clinic</div>
-          <div className="-rotate-90">
-            <BiSolidBarChartAlt2 />
+    <div>
+      <div className="flex flex-col md:flex-row h-screen">
+        <div className="bg-[#1D1D42] w-full md:w-[18%] text-white h-auto md:h-screen space-y-4">
+          <div className="flex items-center gap-6 text-white p-4">
+            <img src="/logo.png" alt="" className="w-[50px] h-[55px]" />
+            <div>Infotech Clinic</div>
+            <div className="-rotate-90">
+              <BiSolidBarChartAlt2 />
+            </div>
+          </div>
+          <div className="space-y-4">
+            <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2">
+              <MdDashboard />
+              <div>Dashboard</div>
+            </div>
+            <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2">
+              <FaCirclePlus />
+              <div>Lead Management</div>
+            </div>
+            <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2">
+              <div className="relative">
+                <BsBarChartFill />
+                <div className="absolute top-[-8px] left-[-3px]">
+                  <IoTrendingUp />
+                </div>
+              </div>
+              <div>Sales Management</div>
+            </div>
+            <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2">
+              <FaUsers />
+              <div>User Management</div>
+            </div>
+            <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2">
+              <GiCash />
+              <div>Finance Management</div>
+            </div>
+            <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2">
+              <FaChartPie />
+              <div>Analytics</div>
+            </div>
+            <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2">
+              <FaTasks />
+              <div>Task Management</div>
+            </div>
+            <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2">
+              <TbInvoice />
+              <div>Invoice</div>
+            </div>
+            <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2">
+              <FaLock />
+              <div>Data Management</div>
+            </div>
+            <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2">
+              <IoLocationSharp />
+              <div>Track Management</div>
+            </div>
+            <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2">
+              <IoSettings />
+              <div>Setting</div>
+            </div>
           </div>
         </div>
-        <div className="space-y-4">
-          <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2 ">
-            <MdDashboard />
-            <div>Dashboard</div>
+        <div className="w-full">
+          <div className="flex flex-col md:flex-row justify-between items-center border-b-2 py-2 border-gray-200 p-4 md:p-6 gap-4">
+            <div className="text-[22px] font-semibold">Lead Management</div>
+            <div className="flex gap-2 items-center text-[18px] text-gray-500">
+              <div className="text-[25px]">
+                <IoIosNotifications />
+              </div>
+              <div>User Name</div>
+              <IoIosArrowDown />
+            </div>
           </div>
-          <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2 ">
-            <FaCirclePlus />
-            <div>Lead Management</div>
-          </div>
-          <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2 ">
-            <div className="relative  ">
-              <BsBarChartFill />
-              <div className="absolute top-[-8px] left-[-3px]">
-                <IoTrendingUp />
+          <div className="py-2 flex flex-col md:flex-row justify-between items-center p-4 md:p-6 gap-4">
+            {/* Searchbar  */}
+            <div className="relative w-full md:w-auto">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search by ID or Name"
+                className="border-2 py-1 px-7 border-gray-200 rounded-md w-full md:w-[300px] outline-none"
+              />
+              <div className="absolute top-[7px] left-[8px] text-gray-500 text-[20px]">
+                <CiSearch />
               </div>
             </div>
-            <div>Sales Management</div>
-          </div>
-          <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2 ">
-            <FaUsers />
-            <div>User Management</div>
-          </div>
-          <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2 ">
-            <GiCash />
-            <div>Finance Management</div>
-          </div>
-          <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2 ">
-            <FaChartPie />
-            <div>Analytics</div>
-          </div>
-          <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2 ">
-            <FaTasks />
-            <div>Task Management</div>
-          </div>
-          <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2 ">
-            <TbInvoice />
-            <div>Invoice</div>
-          </div>
-          <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2 ">
-            <FaLock />
-            <div>Data Management</div>
-          </div>
-          <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2 ">
-            <IoLocationSharp />
-            <div>Track Management</div>
-          </div>
-          <div className="flex gap-2 items-center text-12 cursor-pointer hover:bg-[#27274F] px-4 py-2 ">
-            <IoSettings />
-            <div>Setting</div>
-          </div>
-        </div>
-      </div>
-      <div className=" w-full ">
-        <div className="flex justify-between items-center border-b-2 py-2 border-gray-200 p-6 ">
-          <div className="text-[22px] font-semibold">Lead Management</div>
-          <div className="flex gap-2 items-center text-[18px] text-gray-500">
-            <div className="text-[25px]">
-              <IoIosNotifications />
-            </div>
-            <div>User Name</div>
-            <IoIosArrowDown />
-          </div>
-        </div>
-        <div className="py-2 flex  justify-between items-center p-6">
-          {/* Searchbar  */}
-
-          <div className="relative">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search by ID or Name"
-              className="border-2 py-1 px-7 border-gray-200 rounded-md w-[300px] outline-none"
-            />
-            <div className="absolute top-[7px] left-[8px] text-gray-500 text-[20px]">
-              <CiSearch />
+            <div
+              onClick={handleAddClientClick}
+              className="bg-[#2D74FF] px-2 py-1 rounded-sm cursor-pointer font-semibold text-white flex gap-1 items-center w-full md:w-auto justify-center"
+            >
+              <FaPlus />
+              Add Client
             </div>
           </div>
-
-          <tbody className="bg-white divide-y divide-gray-200"></tbody>
-
-          <div
-            onClick={handleAddClientClick}
-            className="bg-[#2D74FF] px-2 py-1 rounded-sm cursor-pointer font-semibold text-white flex gap-1 items-center"
-          >
-            <FaPlus />
-            Add Client
-          </div>
-        </div>
-        <div className="p-6 bg-[#F8F8F8] h-[601px] overflow-hidden">
-          <div className="overflow-x-auto rounded-md bg-white h-[510px]  p-6">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-white">
-                <tr>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                    Date
-                  </th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                    ID
-                  </th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                    Client Name
-                  </th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                    Phone Number
-                  </th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                    Business Name
-                  </th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                    Industry Type
-                  </th>
-                  <th className="px-4 flex items-center gap-1 py-2 text-left text-sm font-medium text-gray-700">
-                    Status
-                    <IoIosArrowDown />
-                  </th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                    SEO
-                  </th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                    Hosting
-                  </th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {filteredLeads.map((lead) => (
-                  <tr key={lead.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-2">{lead.date}</td>
-                    <td className="px-4 py-2 text-blue-600 font-medium">
-                      {lead.id}
-                    </td>
-                    <td className="px-4 py-2">{lead.clientName}</td>
-                    <td className="px-4 py-2">{lead.phoneNumber}</td>
-                    <td className="px-4 py-2">{lead.businessName}</td>
-                    <td className="px-4 py-2">{lead.industryType}</td>
-                    <td className="px-4 py-2">
-                      <span
-                        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeClass(
-                          lead.status
-                        )}`}
-                      >
-                        {lead.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-2">
-                      <Toggle
-                        isChecked={lead.seo}
-                        onChange={handleSeoToggle}
-                        id={lead.id}
-                      />
-                    </td>
-                    <td className="px-4 py-2">
-                      <Toggle
-                        isChecked={lead.hosting}
-                        onChange={handleHostingToggle}
-                        id={lead.id}
-                      />
-                    </td>
-
-                    <td className="px-4 py-2 text-sm text-gray-500 relative">
-                      <button
-                        onClick={() => toggleActionMenu(lead.id)}
-                        className="p-1 rounded-full hover:bg-gray-100 focus:outline-none"
-                      >
-                        <FiMoreVertical className="h-5 w-5 text-gray-500" />
-                      </button>
-
-                      {lead.showActions && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200 action-menu">
-                          <div className="py-1">
-                            <button
-                              onClick={() => handleEdit(lead.id)}
-                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                            >
-                              <FiEdit className="mr-3 h-4 w-4" />
-                              Edit
-                            </button>
-                            <button
-                             onClick={() => setShowModal(true)}
-                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                            > 
-                              <FiUser className="mr-3 h-4 w-4" />
-                              Description
-                            </button>
-                            {showModal && <DescriptionModal onClose={() => setShowModal(false)} />}
-                            <button
-                              onClick={() => handleDelete(lead.id)}
-                              className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
-                            >
-                              <FiTrash2 className="mr-3 h-4 w-4" />
-                              Delete
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </td>
+          <div className="p-2 md:p-6 bg-[#F8F8F8] h-auto md:h-[601px] overflow-x-auto">
+            <div className="overflow-x-auto rounded-md bg-white h-auto md:h-[510px] p-2 md:p-6">
+              <table className="min-w-[600px] w-full divide-y divide-gray-200 text-xs md:text-sm">
+                <thead className="bg-white">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-xs md:text-sm font-medium text-gray-700">
+                      Date
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs md:text-sm font-medium text-gray-700">
+                      ID
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs md:text-sm font-medium text-gray-700">
+                      Client Name
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs md:text-sm font-medium text-gray-700">
+                      Phone Number
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs md:text-sm font-medium text-gray-700">
+                      Business Name
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs md:text-sm font-medium text-gray-700">
+                      Industry Type
+                    </th>
+                    <th className="px-4 flex items-center gap-1 py-2 text-left text-xs md:text-sm font-medium text-gray-700">
+                      Status
+                      <IoIosArrowDown />
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs md:text-sm font-medium text-gray-700">
+                      SEO
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs md:text-sm font-medium text-gray-700">
+                      Hosting
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs md:text-sm font-medium text-gray-700">
+                      Action
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="flex w-full justify-end gap-2 p-4">
-            <div className="bg-white p-2 cursor-pointer">
-              <MdKeyboardDoubleArrowLeft />
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredLeads.map((lead) => (
+                    <tr key={lead.id} className="hover:bg-gray-50">
+                      <td className="px-4 py-2">{lead.date}</td>
+                      <td className="px-4 py-2 text-blue-600 font-medium">
+                        {lead.id}
+                      </td>
+                      <td className="px-4 py-2">{lead.clientName}</td>
+                      <td className="px-4 py-2">{lead.phoneNumber}</td>
+                      <td className="px-4 py-2">{lead.businessName}</td>
+                      <td className="px-4 py-2">{lead.industryType}</td>
+                      <td className="px-4 py-2">
+                        <span
+                          className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeClass(
+                            lead.status
+                          )}`}
+                        >
+                          {lead.status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-2">
+                        <Toggle
+                          isChecked={lead.seo}
+                          onChange={handleSeoToggle}
+                          id={lead.id}
+                        />
+                      </td>
+                      <td className="px-4 py-2">
+                        <Toggle
+                          isChecked={lead.hosting}
+                          onChange={handleHostingToggle}
+                          id={lead.id}
+                        />
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-500 relative">
+                        <button
+                          onClick={() => toggleActionMenu(lead.id)}
+                          className="p-1 rounded-full hover:bg-gray-100 focus:outline-none"
+                        >
+                          <FiMoreVertical className="h-5 w-5 text-gray-500" />
+                        </button>
+                        {lead.showActions && (
+                          <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200 action-menu">
+                            <div className="py-1">
+                              <button
+                                onClick={() => handleEdit(lead.id)}
+                                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                              >
+                                <FiEdit className="mr-3 h-4 w-4" />
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => setShowModal(true)}
+                                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                              >
+                                <FiUser className="mr-3 h-4 w-4" />
+                                Description
+                              </button>
+                              {showModal && (
+                                <DescriptionModal
+                                  onClose={() => setShowModal(false)}
+                                />
+                              )}
+                              <button
+                                onClick={() => handleDelete(lead.id)}
+                                className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
+                              >
+                                <FiTrash2 className="mr-3 h-4 w-4" />
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            <div className="bg-white p-2 cursor-pointer">
-              <MdKeyboardArrowLeft />
-            </div>
-            <div className="bg-white p-2 cursor-pointer">
-              <MdKeyboardArrowRight />
-            </div>
-            <div className="bg-white p-2 cursor-pointer">
-              <MdKeyboardDoubleArrowRight />
+            <div className="flex w-full justify-end gap-2 p-2 md:p-4">
+              <div className="bg-white p-2 cursor-pointer">
+                <MdKeyboardDoubleArrowLeft />
+              </div>
+              <div className="bg-white p-2 cursor-pointer">
+                <MdKeyboardArrowLeft />
+              </div>
+              <div className="bg-white p-2 cursor-pointer">
+                <MdKeyboardArrowRight />
+              </div>
+              <div className="bg-white p-2 cursor-pointer">
+                <MdKeyboardDoubleArrowRight />
+              </div>
             </div>
           </div>
         </div>
+        {isHostingModalOpen && (
+          <HostingModal
+            onClose={() => {
+              setIsHostingModalOpen(false);
+              setPendingHostingLeadId(null);
+            }}
+            onSave={handleSaveHosting}
+          />
+        )}
       </div>
-      {isHostingModalOpen && (
-        <HostingModal
-          onClose={() => {
-            setIsHostingModalOpen(false);
-            setPendingHostingLeadId(null);
-          }}
-          onSave={handleSaveHosting}
-        />
-      )}
+      <style>{`
+        @media (max-width: 1024px) {
+          .md\\:flex-row { flex-direction: column !important; }
+          .md\\:w-\\[18\\%\\] { width: 100% !important; }
+          .md\\:h-screen { height: auto !important; }
+          .md\\:p-6 { padding: 1rem !important; }
+          .md\\:h-\\[510px\\] { height: auto !important; }
+          .md\\:h-\\[601px\\] { height: auto !important; }
+          .md\\:text-sm { font-size: 0.85rem !important; }
+          .min-w-\\[600px\\] { min-width: 100vw !important; }
+        }
+        @media (max-width: 600px) {
+          .p-4, .md\\:p-6 { padding: 0.5rem !important; }
+          .gap-4 { gap: 0.5rem !important; }
+        }
+      `}</style>
     </div>
   );
 }

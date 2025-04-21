@@ -2,7 +2,7 @@ import React from "react";
 
 const HostingModal = ({ onClose, onSave }) => {
   return (
-    <div className="fixed inset-0 bg-opacity-40 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-opacity-40 z-50 flex bg-black/20 items-center justify-center">
       <div className="relative bg-white w-[512px] rounded-[20px] p-6 shadow-xl h-[731px]">
         {/* Title + Close */}
         <div className="flex justify-between items-center mb-6">
