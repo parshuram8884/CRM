@@ -95,13 +95,37 @@ export default function LeadManagement() {
     },
   ]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusSort, setStatusSort] = useState(null); // 'asc' | 'desc' | null
+  const [industrySort, setIndustrySort] = useState(null); // 'asc' | 'desc' | null
 
-  // Add this filter function
+  // Get unique status and industry types for dropdowns
+  const uniqueStatuses = Array.from(new Set(leads.map((l) => l.status)));
+  const uniqueIndustries = Array.from(new Set(leads.map((l) => l.industryType)));
+
+  // Filtered leads by search
   const filteredLeads = leads.filter(
     (lead) =>
       lead.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       lead.clientName.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Sorting logic
+  let sortedLeads = [...filteredLeads];
+  if (statusSort) {
+    sortedLeads.sort((a, b) => {
+      if (a.status < b.status) return statusSort === "asc" ? -1 : 1;
+      if (a.status > b.status) return statusSort === "asc" ? 1 : -1;
+      return 0;
+    });
+  }
+  if (industrySort) {
+    sortedLeads.sort((a, b) => {
+      if (a.industryType < b.industryType) return industrySort === "asc" ? -1 : 1;
+      if (a.industryType > b.industryType) return industrySort === "asc" ? 1 : -1;
+      return 0;
+    });
+  }
+
   // Status options
   const statusOptions = ["Received", "Processing", "Closed", "Rejected"];
   // Add this useEffect to apply custom styles to SweetAlert
@@ -709,7 +733,7 @@ export default function LeadManagement() {
               <IoIosArrowDown />
             </div>
           </div>
-          <div className="py-2 flex flex-col md:flex-row justify-between items-center p-4 md:p-6 gap-4">
+          <div className="py-2 flex flex-col md:flex-row flex-wrap justify-between items-center p-4 md:p-6 gap-4">
             {/* Searchbar  */}
             <div className="relative w-full md:w-auto">
               <input
@@ -752,11 +776,40 @@ export default function LeadManagement() {
                       Business Name
                     </th>
                     <th className="px-4 py-2 text-left text-xs md:text-sm font-medium text-gray-700">
-                      Industry Type
+                      <div className="flex flex-col">
+                        <span>Industry Type</span>
+                        <div className="flex gap-1 mt-1">
+                          <select
+                            className="border border-gray-200 rounded-md text-xs outline-none"
+                            value={industrySort || ""}
+                            onChange={(e) =>
+                              setIndustrySort(e.target.value || null)
+                            }
+                          >
+                            <option value="">Sort</option>
+                            <option value="asc">A-Z</option>
+                            <option value="desc">Z-A</option>
+                          </select>
+                        </div>
+                      </div>
                     </th>
-                    <th className="px-4 flex items-center gap-1 py-2 text-left text-xs md:text-sm font-medium text-gray-700">
-                      Status
-                      <IoIosArrowDown />
+                    <th className="px-4 py-2 text-left text-xs md:text-sm font-medium text-gray-700">
+                      <div className="flex flex-col">
+                        <span>Status</span>
+                        <div className="flex gap-1 mt-1">
+                          <select
+                            className="border border-gray-200 rounded-md text-xs outline-none"
+                            value={statusSort || ""}
+                            onChange={(e) =>
+                              setStatusSort(e.target.value || null)
+                            }
+                          >
+                            <option value="">Sort</option>
+                            <option value="asc">A-Z</option>
+                            <option value="desc">Z-A</option>
+                          </select>
+                        </div>
+                      </div>
                     </th>
                     <th className="px-4 py-2 text-left text-xs md:text-sm font-medium text-gray-700">
                       SEO
@@ -770,7 +823,7 @@ export default function LeadManagement() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredLeads.map((lead) => (
+                  {sortedLeads.map((lead) => (
                     <tr key={lead.id} className="hover:bg-gray-50">
                       <td className="px-4 py-2">{lead.date}</td>
                       <td className="px-4 py-2 text-blue-600 font-medium">
@@ -888,6 +941,7 @@ export default function LeadManagement() {
         @media (max-width: 600px) {
           .p-4, .md\\:p-6 { padding: 0.5rem !important; }
           .gap-4 { gap: 0.5rem !important; }
+          .flex-wrap { flex-wrap: wrap !important; }
         }
       `}</style>
     </div>
