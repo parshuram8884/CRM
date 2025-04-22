@@ -664,7 +664,7 @@ export default function LeadManagement() {
       <div className="flex flex-col md:flex-row h-screen">
         <div className="bg-[#1D1D42] w-full md:w-[18%] text-white h-auto md:h-screen space-y-4">
           <div className="flex items-center gap-6 text-white p-4">
-            <img src="/logo.png" alt="" className="w-[50px] h-[55px]" />
+            <img src="/logo.png" alt="Infotech Clinic Logo" className="w-[50px] h-[55px]" />
             <div>Infotech Clinic</div>
             <div className="-rotate-90">
               <BiSolidBarChartAlt2 />
